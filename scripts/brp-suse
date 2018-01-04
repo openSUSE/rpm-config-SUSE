@@ -1,0 +1,13 @@
+#! /bin/sh
+
+# If using normal root, avoid changing anything:
+if [ -z "$RPM_BUILD_ROOT" -o "$RPM_BUILD_ROOT" = "/" ]; then
+       exit 0
+fi
+
+for script in /usr/lib/rpm/brp-suse.d/brp*; do
+  if test -x "$script"; then
+    echo "calling $script"
+    $script || exit 1
+  fi
+done

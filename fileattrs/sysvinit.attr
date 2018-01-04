@@ -1,0 +1,2 @@
+%__sysvinit_provides	%{_rpmconfigdir}/sysvinitdeps.sh --provides
+%__sysvinit_path	^/etc/init\.d/

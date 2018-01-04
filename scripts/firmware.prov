@@ -1,0 +1,8 @@
+#!/bin/sh
+# Add firmware files in /lib/firmware into RPM provides
+
+while read instfile ; do
+  case $instfile in
+    */lib/firmware/*) test -f "$instfile" && echo "firmware(${instfile##*/lib/firmware/})" ;;
+  esac
+done

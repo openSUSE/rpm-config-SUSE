@@ -1,0 +1,29 @@
+#! /bin/bash
+
+IFS=$'\n'
+
+is_opensuse=false
+
+if test "$1" = "--opensuse"; then
+    if test "$2" -gt 0; then
+        is_opensuse=true
+    fi
+    shift 2
+fi
+
+if ! $is_opensuse && ! test -e /sbin/modprobe; then
+    cat > /dev/null
+    exit 0
+fi
+
+for f in $(grep -E '/lib/modules/.+\.ko$' | grep -v '/lib/modules/[^/]*/kernel/'); do
+    flavor=${f#*/lib/modules/}
+    flavor=${flavor%%/*}
+    if $is_opensuse; then
+        echo "kernel-uname-r = $flavor"
+        continue
+    fi
+    flavor=${flavor##*-}
+    /sbin/modprobe --dump-modversions "$f" \
+	    | sed -r -ne "s/^0x0*([0-9a-f]+)[[:blank:]]+(.+)/ksym($flavor:\\2) = \\1/p"
+done | sort -u
