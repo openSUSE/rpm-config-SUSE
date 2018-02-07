@@ -19,6 +19,7 @@ fi
 
 while read f; do
     test -e "$f" || continue
+    is_module=""
     case "$f" in
     *.debug)
         continue
@@ -27,9 +28,11 @@ while read f; do
         flavor=${f##*/vmlinu[xz]-}
         flavor=${flavor%.gz}
         echo "kernel-uname-r = $flavor"
+        version=${flavor}
         flavor=${flavor##*-}
         ;;
     */lib/modules/*/*.ko | */lib/modules/*/*.ko.gz | */boot/vmlinu[xz]*)
+        is_module="1"
         ;;
     *)
         continue
@@ -45,16 +48,34 @@ while read f; do
     if $unzip && gzip -cd "$f" >"$tmp"; then
         f=$tmp
     fi
-    if test -z "$flavor"; then
+    if test -z "$flavor" -a -n "$is_module" ; then
         flavor=$(/sbin/modinfo -F vermagic "$f")
         flavor=${flavor%% *}
+        version=${flavor}
         flavor=${flavor##*-}
     fi
     if test -z "$flavor"; then
         echo "warning: cannot determine kernel flavor from $(/sbin/modinfo -F vermagic "$f" 2>&1)" >&2
         continue
     fi
-    nm "$f" \
-    | sed -r -ne "s/^0*([0-9a-f]+) A __crc_(.+)/ksym($flavor:\\2) = \\1/p"
+    objdir=$(readlink /lib/modules/$version/build)
+    objdir_build=$RPM_BUILD_ROOT$(readlink $RPM_BUILD_ROOT/lib/modules/$version/build)
+    for i in $objdir_build $objdir ; do
+            ksym_provides=$i/scripts/mod/ksym-provides
+            [ -x $ksym_provides ] && break
+    done
+    if [ -x $ksym_provides ] ; then
+            $ksym_provides $flavor $f
+    else
+            major=${version%%.*}
+            sub=${version#*.}
+            sub=${sub%%.*}
+            if [ "$major" -ge 4 -a "$sub" -ge 10 ] ; then
+                    echo "error: cannot determine ksym provides of $f - missing ksym-povides tool." >&2
+            else
+                    nm "$f" \
+                            | sed -r -ne "s/^0*([0-9a-f]+) A __crc_(.+)/ksym($flavor:\\2) = \\1/p"
+            fi
+    fi
 done \
 | sort -u
