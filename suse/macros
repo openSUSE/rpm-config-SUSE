@@ -22,6 +22,34 @@
 # Should invalid version format in requires, provides, ... terminate a build?
 %_wrong_version_format_terminate_build 0
 
+# debuginfo configuration
+%_build_id_links compat
+%_debugsource_packages 1
+%_debuginfo_subpackages 1
+
+# maxnum,cuttime,minnum
+# 2009/03/01 (SLES11 GA)
+%_binarychangelogtrim 0,1235862000,10
+
+# Path to scripts to autogenerate package dependencies,
+# Note: Used iff _use_internal_dependency_generator is zero.
+%__find_provides       %{_rpmconfigdir}/find-provides %name
+%__find_requires       %{_rpmconfigdir}/find-requires %name
+%__find_supplements    %{_rpmconfigdir}/find-supplements %name
+
+# BDB tuning options
+%_dbi_config           %{?__dbi_other} nofsync
+%_dbi_config_Packages  %{?_dbi_config} lockdbfd
+
+# Useful extra perl macros
+%requires_eq() %(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+%requires_ge() %(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} >= %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+
+# ARM platform macros
+%arm    armv3l armv4b armv4l armv4tl armv5b armv5l armv5teb armv5tel armv5tejl armv6l armv6hl armv7l armv7hl armv7hnl
+%arml   armv3l armv4l armv5l armv5tel armv6l armv6hl armv7l armv7hl armv7hnl
+%armb   armv4b armv5b armv5teb
+
 
 # ---- SUSE MACROS ----
 
