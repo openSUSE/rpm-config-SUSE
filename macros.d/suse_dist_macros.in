@@ -1,0 +1,5 @@
+%suse_version @suse_version@
+%sles_version @sles_version@
+%ul_version @ul_version@
+%is_opensuse @is_opensuse@
+%leap_version @leap_version@
