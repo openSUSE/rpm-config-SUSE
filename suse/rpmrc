@@ -1,0 +1,78 @@
+include: /usr/lib/rpm/rpmrc
+
+#############################################################
+# Values for RPM_OPT_FLAGS for various platforms
+
+optflags: i386 -O2 -g -m32 -march=i486 -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+optflags: i486 -O2 -g -m32 -march=i486 -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+optflags: i586 -O2 -g -m32 -march=i586 -mtune=i686 -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+optflags: i686 -O2 -g -m32 -march=i686 -mtune=i686 -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+optflags: pentium3 -O2 -g -m32 -march=pentium3
+optflags: pentium4 -O2 -g -m32 -march=pentium4
+optflags: athlon -O2 -g -m32 -march=athlon
+optflags: geode -Os -g -m32 -march=geode
+optflags: ia64 -O2 -g -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+optflags: x86_64 -O2 -g -m64 -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+
+optflags: ppc -O2 -g -m32 -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+optflags: ppc8260 -O2 -g -m32
+optflags: ppc8560 -O2 -g -m32
+optflags: ppc32dy4 -O2 -g -m32
+optflags: ppciseries -O2 -g -m32
+optflags: ppcpseries -O2 -g -m32
+optflags: ppc64 -O2 -g -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+optflags: ppc64le -O2 -g -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+optflags: ppc64p7 -O3 -mtune=power7 -mcpu=power7 -g -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+
+optflags: hppa -O2 -g -mpa-risc-1-0
+
+optflags: armv6hl -O2 -g -march=armv6 -mfloat-abi=hard -mabi=aapcs-linux
+
+optflags: armv7hl -O2 -g -march=armv7-a -mfloat-abi=hard -mthumb -mabi=aapcs-linux
+
+optflags: s390 -O2 -g -m31 -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+optflags: s390x -O2 -g -m64 -fmessage-length=0 -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables
+
+#############################################################
+# For a given uname().machine, the default build arch
+
+buildarchtranslate: osfmach3_i686: i586
+buildarchtranslate: osfmach3_i586: i586
+
+buildarchtranslate: athlon: i586
+buildarchtranslate: geode: i586
+buildarchtranslate: pentium4: i586
+buildarchtranslate: pentium3: i586
+buildarchtranslate: i686: i586
+buildarchtranslate: i586: i586
+
+buildarchtranslate: powerpc64: ppc64
+
+buildarchtranslate: parisc: hppa
+buildarchtranslate: hppa2.0: hppa
+buildarchtranslate: hppa64: hppa
+
+buildarchtranslate: armv5l: armv4l
+buildarchtranslate: armv5tel: armv4l
+buildarchtranslate: armv5b: armv4b
+buildarchtranslate: armv5teb: armv4b
+
+#############################################################
+# Architecture compatibility
+
+arch_compat: hppa1.0: hppa
+arch_compat: hppa: parisc
+
+arch_compat: armv5teb: armv5b
+arch_compat: armv5b: armv4b
+arch_compat: armv7hl: armv7l
+arch_compat: armv6hl: armv6l
+arch_compat: armv5tl: armv5l
+arch_compat: armv5l: armv4tl
+
+buildarch_compat: armv7hl: armv7l
+buildarch_compat: armv6hl: armv6l
+
+buildarch_compat: hppa1.0: hppa
+buildarch_compat: hppa: parisc
+
