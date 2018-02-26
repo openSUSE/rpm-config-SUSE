@@ -245,11 +245,6 @@
 %supplements_kernel_module() \
     %{expand:%(if ! rpm -q kernel-syms > /dev/null; then echo "%fail Please add the kernel-syms package to BuildRequires"; fi)}
 
-%suse_version 1550
-%sles_version 0
-%ul_version 0
-%is_opensuse 1
-
 %do_profiling 1
 %cflags_profile_generate -fprofile-generate
 %cflags_profile_feedback -fprofile-use
@@ -274,20 +269,6 @@ Supplements: %{-n:%{-n*}}%{!-n:%{name}} \
 BuildArch: noarch \
 %description %{-n:-n %{-n*}-}lang \
 Provides translations for the \"%{name}\" package.
-
-# package version comparison macros
-
-# compare two versions, returns -1, 0, 1, ~~~
-%rpm_vercmp() %{lua:print(rpm.expand('%1') == '~~~' and '~~~' or rpm.vercmp(rpm.expand('%1'), rpm.expand('%2')))}
-
-# expand to the installed version of a package/provides
-%pkg_version() %(LC_ALL=C rpm -q --whatprovides --qf "%%{version}" "%1" | sed -e "s/^no package provides .*/~~~/")
-
-# compare the installed version to a value. returns -1, 0, 1, ~~~
-%pkg_version_cmp() %{expand:%{expand:%%%%{rpm_vercmp %%{pkg_version %1} %%2}}}
-
-# convenience/readability
-%pkg_vcmp() (%{expand:%%{pkg_version_cmp %1 %3}} %2 0)
 
 #---------------------------------------------------------------------
 #        Expanded at end of %prep
