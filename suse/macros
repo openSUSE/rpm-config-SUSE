@@ -1,3 +1,30 @@
+# ---- RPM OVERRIDES ----
+
+# The location of the rpm database file(s).
+%_dbpath                %{_usr}/lib/sysimage/rpm
+
+%_defaultdocdir         %{_datadir}/doc/packages
+%_docdir_fmt            %%{NAME}
+
+# Path to top of build area.
+%_topdir                %{expand:%%global _topdir %{lua:if posix.access(rpm.expand("%{_usrsrc}/packages"), "w") then print "%{_usrsrc}/packages" else print "%{getenv:HOME}/rpmbuild" end} \
+}%_topdir
+
+# Compression type and level for source/binary package payloads.
+%_binary_payload        w5.xzdio
+
+#
+# Should empty %files manifest file terminate a build?
+#
+# Note: The default value should be 0 for legacy compatibility.
+%_empty_manifest_terminate_build        0
+
+# Should invalid version format in requires, provides, ... terminate a build?
+%_wrong_version_format_terminate_build 0
+
+
+# ---- SUSE MACROS ----
+
 # need to keep this around for a while
 %suse_check             %{nil}
 
@@ -269,6 +296,8 @@ Supplements: %{-n:%{-n*}}%{!-n:%{name}} \
 BuildArch: noarch \
 %description %{-n:-n %{-n*}-}lang \
 Provides translations for the \"%{name}\" package.
+
+# ---- PLATFORM MACROS ----
 
 #---------------------------------------------------------------------
 #        Expanded at end of %prep
