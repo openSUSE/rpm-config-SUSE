@@ -1,0 +1,11 @@
+# More useful perl macros (from Raul Dias <rsd@swi.com.br>)
+#
+%perl_version          %(perl -V:version | sed "s!.*='!!;s!'.*!!")
+%perl_man1ext          %(perl -V:man1ext | sed "s!.*='!!;s!'.*!!")
+%perl_man3ext          %(perl -V:man3ext | sed "s!.*='!!;s!'.*!!")
+%perl_man1dir          %(perl -V:man1dir | sed "s!.*='!!;s!'.*!!")
+%perl_man3dir          %(perl -V:man3dir | sed "s!.*='!!;s!'.*!!")
+%perl_installman1dir   %(perl -V:installman1dir | sed "s!.*='!!;s!'.*!!")
+%perl_installman3dir   %(perl -V:installman3dir | sed "s!.*='!!;s!'.*!!")
+%perl_installarchlib   %(perl -V:installarchlib | sed "s!.*='!!;s!'.*!!")
+%perl_prefix           %{buildroot}
