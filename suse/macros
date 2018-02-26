@@ -10,7 +10,6 @@
 %_fillupdir             %{_usr}/share/fillup-templates
 
 # package build macros
-%make_install           make install DESTDIR=%{?buildroot}
 %makeinstall            make DESTDIR=%{?buildroot:%{buildroot}} install
 %insserv_prereq         insserv sed
 %fillup_prereq          fillup coreutils grep diffutils
@@ -290,3 +289,21 @@ Provides translations for the \"%{name}\" package.
 # convenience/readability
 %pkg_vcmp() (%{expand:%%{pkg_version_cmp %1 %3}} %2 0)
 
+#---------------------------------------------------------------------
+#        Expanded at end of %prep
+#
+%__id_u          %{__id} -u
+%__chown_Rhf     %{__chown} -Rhf
+%__chgrp_Rhf     %{__chgrp} -Rhf
+%_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root
+%_fixgroup       [ `%{__id_u}` = '0' ] && %{__chgrp_Rhf} root
+%_fixperms       %{__chmod} -Rf @FIXPERMS@
+
+#---------------------------------------------------------------------
+#        Expanded at start of %build
+#
+%__spec_build_pre %{___build_pre}\
+%{?buildroot:  %__rm -rf "$RPM_BUILD_ROOT"\
+  %__mkdir_p `dirname "$RPM_BUILD_ROOT"`\
+  %__mkdir "$RPM_BUILD_ROOT"\
+}
