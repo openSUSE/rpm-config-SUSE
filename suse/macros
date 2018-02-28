@@ -63,6 +63,7 @@
 %_localstatedir         /var
 %_defaultdocdir         %{_usr}/share/doc/packages
 %_fillupdir             %{_usr}/share/fillup-templates
+%_initddir              %{_sysconfdir}/init.d
 
 # package build macros
 %makeinstall            make DESTDIR=%{?buildroot:%{buildroot}} install
