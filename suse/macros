@@ -332,12 +332,10 @@ Provides translations for the \"%{name}\" package.
 #---------------------------------------------------------------------
 #        Expanded at end of %prep
 #
-%__id_u          %{__id} -u
 %__chown_Rhf     %{__chown} -Rhf
 %__chgrp_Rhf     %{__chgrp} -Rhf
 %_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root
 %_fixgroup       [ `%{__id_u}` = '0' ] && %{__chgrp_Rhf} root
-%_fixperms       %{__chmod} -Rf @FIXPERMS@
 
 #---------------------------------------------------------------------
 #        Expanded at start of %build
