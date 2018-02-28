@@ -73,8 +73,9 @@
 
 # this script calls all scripts in /usr/lib/rpm/brp-suse.d
 %__os_install_post  \
-	/usr/lib/rpm/brp-compress \
-	/usr/lib/rpm/brp-suse  \
+	%{_rpmconfigdir}/brp-compress \
+	%{_rpmconfigdir}/brp-strip %{__strip} \
+	%{_rpmconfigdir}/brp-suse  \
 %{nil}
 
 %restart_on_update()	%{expand::%%service_del_postun %{?**}}
