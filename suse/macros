@@ -23,7 +23,7 @@
 %_wrong_version_format_terminate_build 0
 
 # debuginfo configuration
-%_build_id_links compat
+%_build_id_links alldebug
 %_debugsource_packages 1
 %_debuginfo_subpackages 1
 
