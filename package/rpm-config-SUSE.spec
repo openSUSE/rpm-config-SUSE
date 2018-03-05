@@ -23,7 +23,7 @@ Release:        0
 Summary:        SUSE specific RPM configuration files
 License:        GPL-2.0+
 Group:          System/Packages
-URL:            https://github.com/Conan-Kudo/rpm-config-SUSE
+URL:            https://github.com/openSUSE/rpm-config-SUSE
 Source:         %{name}-%{version}.tar.gz
 
 # Generic Provides for distribution RPM configuration
