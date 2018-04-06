@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr  6 10:05:18 UTC 2018 - Adam Majer <adam.majer@suse.de>
+
+- %install_info: if we are going to fail, at least fail on install
+  not on attempted upgrades or uninstall [bsc#1084997]
+
+-------------------------------------------------------------------
 Mon Mar  5 18:44:44 UTC 2018 - Neal Gompa <ngompa13@gmail.com>
 
 - Package data updated to reflect move to openSUSE GitHub organization

@@ -280,13 +280,11 @@
 %run_ldconfig /sbin/ldconfig
 
 # for %post
+# for %post
 %install_info(:-:) \
     ALL_ARGS=(%{**}) \
-    NUM_ARGS=${#ALL_ARGS[@]} \
     if test -x /sbin/install-info ; then \
-	if test -e "${ALL_ARGS[$((NUM_ARGS-1))]}" ; then \
-	    /sbin/install-info "${ALL_ARGS[@]}" \
-	fi \
+	/sbin/install-info "${ALL_ARGS[@]}" || : \
     fi ;
 
 # for %preun
