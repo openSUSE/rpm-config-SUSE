@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Apr 18 11:50:11 UTC 2018 - Martin Liska <mliska@suse.cz>
+
+- Enable -fprofile-update=atomic for PGO (boo#1040589).
+
+-------------------------------------------------------------------
 Fri Apr  6 10:05:18 UTC 2018 - Adam Majer <adam.majer@suse.de>
 
 - %install_info: if we are going to fail, at least fail on install

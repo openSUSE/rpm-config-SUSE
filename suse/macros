@@ -301,7 +301,7 @@
     %{expand:%(if ! rpm -q kernel-syms > /dev/null; then echo "%fail Please add the kernel-syms package to BuildRequires"; fi)}
 
 %do_profiling 1
-%cflags_profile_generate -fprofile-generate
+%cflags_profile_generate -fprofile-update=atomic -fprofile-generate
 %cflags_profile_feedback -fprofile-use
 
 %suse_install_update_message() \
