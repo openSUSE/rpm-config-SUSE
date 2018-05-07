@@ -27,6 +27,30 @@
 %_debugsource_packages 1
 %_debuginfo_subpackages 1
 
+#
+#	Path to script that creates debug symbols in a /usr/lib/debug
+#	shadow tree.
+#
+#	A spec file can %%define _find_debuginfo_opts to pass options to
+#	the script.  See the script for details.
+#
+%__debug_install_post   \
+    %{_rpmconfigdir}/find-debuginfo.sh \\\
+    %{?_smp_mflags} \\\
+    %{?_missing_build_ids_terminate_build:--strict-build-id} \\\
+    %{?_no_recompute_build_ids:-n} \\\
+    %{?_include_minidebuginfo:-m} \\\
+    %{?_include_gdb_index:-i} \\\
+    %{?_unique_build_ids:--build-id-seed "%{VERSION}-%{RELEASE}"} \\\
+    %{?_unique_debug_names:--unique-debug-suffix "-%{VERSION}-%{RELEASE}.%{_arch}"} \\\
+    %{?_unique_debug_srcs:--unique-debug-src-base "%{name}-%{VERSION}-%{RELEASE}.%{_arch}"} \\\
+    %{lua:if not posix.access(rpm.expand("%_sourcedir/baselibs.conf"), "r") then print(rpm.expand("%{?_find_debuginfo_dwz_opts}")) end} \\\
+    %{?_find_debuginfo_opts} \\\
+    %{?_debugsource_packages:-S debugsourcefiles.list} \\\
+    "%{_builddir}/%{?buildsubdir}"\
+%{nil}
+
+
 # maxnum,cuttime,minnum
 # 2009/03/01 (SLES11 GA)
 %_binarychangelogtrim 0,1235862000,10

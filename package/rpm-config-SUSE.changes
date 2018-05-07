@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May  7 16:36:45 CEST 2018 - Michael Schroeder <mls@suse.de>
+
+- Disable debuginfo dwz compression for baselibs packages
+  [bnc#1092189]
+
+-------------------------------------------------------------------
 Wed Apr 18 11:50:11 UTC 2018 - Martin Liska <mliska@suse.cz>
 
 - Enable -fprofile-update=atomic for PGO (boo#1040589).
