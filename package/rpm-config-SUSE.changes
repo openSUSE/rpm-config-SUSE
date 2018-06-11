@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jun 11 11:43:36 CEST 2018 - Michael Schroeder <mls@suse.de>
+
+- Define sle_version in leap [bnc#1094735]
+
+-------------------------------------------------------------------
 Wed May 30 10:48:49 UTC 2018 - Michal Suchanek <msuchanek@suse.com>
 
 - openSUSE releases also preserve kabi (boo#1095148).
