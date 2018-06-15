@@ -2,16 +2,16 @@
 
 IFS=$'\n'
 
-is_opensuse=false
+is_tumbleweed=false
 
-if test "$1" = "--opensuse"; then
+if test "$1" = "--tumbleweed"; then
     if test "$2" -gt 0; then
-        is_opensuse=true
+        is_tumbleweed=true
     fi
     shift 2
 fi
 
-if ! $is_opensuse; then
+if ! $is_tumbleweed; then
     trap 'rm -f "$tmp"' EXIT
     tmp=$(mktemp)
 fi
@@ -37,7 +37,7 @@ while read f; do
     *)
         continue
     esac
-    if $is_opensuse; then
+    if $is_tumbleweed; then
         continue
     fi
     unzip=false

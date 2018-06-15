@@ -1,2 +1,2 @@
-%__kernel_provides	%{_rpmconfigdir}/find-provides.ksyms --opensuse 0%{?is_opensuse}
+%__kernel_provides	%{_rpmconfigdir}/find-provides.ksyms --tumbleweed %{?sle_version:0}%{!?sle_version:1}
 %__kernel_path		^(/lib/modules/[^/]*/kernel/.*\.ko(\.gz)?|/boot/vmlinu[xz].*)$
