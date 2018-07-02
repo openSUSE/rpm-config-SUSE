@@ -1,0 +1,287 @@
+# need to keep this around for a while
+%suse_check             %{nil}
+
+# directories
+%_infodir               %{_prefix}/share/info
+%_mandir                %{_prefix}/share/man
+%_sysconfdir            /etc
+%_localstatedir         /var
+%_defaultdocdir         %{_usr}/share/doc/packages
+%_fillupdir             %{_usr}/share/fillup-templates
+
+# package build macros
+%make_install           make install DESTDIR=%{?buildroot}
+%makeinstall            make DESTDIR=%{?buildroot:%{buildroot}} install
+%insserv_prereq         insserv sed
+%fillup_prereq          fillup coreutils grep diffutils
+%install_info_prereq    info
+
+# this script calls all scripts in /usr/lib/rpm/brp-suse.d
+%__os_install_post  \
+	/usr/lib/rpm/brp-compress \
+	/usr/lib/rpm/brp-suse  \
+%{nil}
+
+%restart_on_update()	%{expand::%%service_del_postun %{?**}}
+%stop_on_removal()	%{expand:%%service_del_preun %{?**}}
+
+# macro: %configure_kernel_source
+#
+#
+%configure_kernel_source() \
+	if test -d /usr/src/linux ; then \
+	    pushd /usr/src/linux \
+	    test -f .config || cp arch/%_arch/defconfig.default .config \
+	    yes "" | make oldconfig \
+	    make dep \
+	    popd \
+	fi \
+	%nil
+
+%is_plus %(if test -f /.buildenv ; then source /.buildenv ; if [[ "$BUILD_BASENAME" == *+kde ]] ; then echo 1 ; else echo 0 ; fi ; else echo 0 ; fi)
+
+%set_permissions(f:) \
+  if [ -x /usr/bin/chkstat ]; then \
+    /usr/bin/chkstat -n --set --system %{**} \
+  fi \
+  %nil
+
+%verify_permissions(e:f:) \
+   /usr/bin/chkstat -n --warn --system %{**} 1>&2 \
+   %nil
+
+%suse_update_libdir() \
+   if [ %_lib != lib ]; then \
+     for file in %{?*} ; do \
+        [ ! -e $file ] && echo "Error:  $file does not exist!" && exit -1 \
+        [ -e $file.nolib64 ] && echo "Error:  $file.nolib64 already exists!" && exit -1 \
+        cp $file $file.nolib64 \
+        echo "patching $file" \
+        sed -e "s,/lib\\\>,/%_lib,g" $file.nolib64 | sed -e "s,/%_lib/cpp,/lib/cpp,; s,/usr/%_lib/perl,/usr/lib/perl, ; s,/%_lib\\([\$-]\\),/lib\\1,g" > $file \
+	diff -u $file.nolib64 $file \
+        rm -f $file.nolib64 \
+     done; \
+   fi ; \
+
+
+# macro: fillup_and_insserv
+# do the fillup and insserv calls for postinstall
+# options:
+#         -n  (use first argument as name for fillup template filenames
+#		instead of package name)
+#         -f  (skip fillup parts)
+#         -i  (skip insserv parts)
+#         -y  (default start-variable value to yes)
+#             Used only if X-UnitedLinux-Default-Enabled is not specified
+#             in the init script
+#         -Y  (force_yes: always activate, discard setting before update)
+# arguments:
+#         [if "-n" first argument as package name]
+#         Pairs of:
+#            main script name
+#           and
+#            name of (old) START variable (unless -s is given)
+#
+# template for variables into /etc/sysconfig/package:
+#     /usr/share/fillup-templates/sysconfig.package
+%fillup_and_insserv(finpsyY) \
+    %{-p:echo "-p option for fillup_and_insserv no longer supported (ever only used on SL8.0)"; exit 1;} \
+    %{-s:echo "STARTVAR for fillup_and_insserv no longer supported (rc.config is gone since SL8.0)"; exit 1;} \
+    test -n "$FIRST_ARG" || FIRST_ARG=$1 \
+    %{-Y:FORCE_YES=1}%{!-Y:FORCE_YES=0} \
+    set -- %{?*} \
+    %{-n:PNAME=$1 ; shift }%{!-n:PNAME=%{name}} \
+    INSSRV_ARRAY="" \
+    while [ ${#*} -gt 0 ] ; do \
+	SCRIPTNAME=$1 \
+	shift \
+	SV_B='^### BEGIN INIT INFO' \
+	SV_E='^### END INIT INFO' \
+	SV_KW=Default-Enabled \
+	SV_VALUE=`sed -n -e "/$SV_B/,/$SV_E/{/^# [^[:space:]]*$SV_KW:[[:space:]]*\\([^[:space:]]*\\).*/s//\\1/p;}" < /etc/init.d/$SCRIPTNAME` \
+	test "$FORCE_YES" = "1" && SV_VALUE="yes" \
+	test -n "$SV_VALUE" || SV_VALUE=%{-y:"yes"}%{!-y:"no"} \
+	INSSRV_ARRAY="$INSSRV_ARRAY $SCRIPTNAME $SV_VALUE" \
+    done \
+    %{!-f: %{do_real_fillup}} \
+    %{!-i: %{add_start_if_needed $INSSRV_ARRAY } } \
+    %nil
+
+# do_real_fillup: internal macro
+# this part really calls fillup for the appropriate files
+#
+%do_real_fillup() \
+    SYSC_TEMPLATE=%{_fillupdir}/sysconfig.$PNAME \
+    # If template not in new %{_fillupdir}, fallback to old TEMPLATE_DIR \
+    if [ ! -f $SYSC_TEMPLATE ] ; then \
+        TEMPLATE_DIR=/var/adm/fillup-templates \
+        SYSC_TEMPLATE=$TEMPLATE_DIR/sysconfig.$PNAME \
+    fi \
+    SD_NAME="" \
+    %{sysc_fillup}
+
+# add_start_if_needed: internally used by fillup_and_insserv
+%add_start_if_needed() \
+    set -- %{?*} \
+    while [ ${#*} -gt 0 ] ; do \
+	SCRIPTNAME=$1 \
+	SV_VALUE=$2 \
+	shift 2 \
+	test -n "$SCRIPTNAME" -a -n "$SV_VALUE" || { echo "SCRIPTNAME or SV_VALUE unknown"; exit 1;} \
+	if test "$FIRST_ARG" = "1" -a "$SV_VALUE" = "no" ; then \
+	    /sbin/insserv ${YAST_IS_RUNNING:+-f} -r /etc/init.d/$SCRIPTNAME \
+	elif test "$FIRST_ARG" = "1" -o "$FORCE_YES" = "1" ; then \
+	    /sbin/insserv ${YAST_IS_RUNNING:+-f} /etc/init.d/$SCRIPTNAME \
+	fi \
+    done
+
+# macro: insserv_cleanup
+%insserv_cleanup() \
+    /sbin/insserv /etc/init.d
+
+# macro: fillup_only
+#    do the fillup for sysconfig files
+#   template naming convention:
+#     .../fillup-templates/sysconfig.$NAME1[-$NAME2]
+#     NAME1: the name of the sysconfig-file
+#     NAME2: if needed (if more packages fill the
+#            same sysconfig file) the package name
+#   options:
+#           -n set sysconfig name manually
+#           -a use package name as $NAME2
+#           -s use second arg as package-name
+#           -d use a subdirectory of sysconfig
+#              (last arg as directory name)
+%fillup_only(dans) \
+    %{-n:PNAME=%{1}}%{!-n:PNAME=%{name}} \
+    %{-s:SUBPNAME=-%{2}}%{!-s:SUBPNAME=%{-a:-%{name}}} \
+    SYSC_TEMPLATE=%{_fillupdir}/sysconfig.$PNAME$SUBPNAME \
+    # If template not in new %{_fillupdir}, fallback to old TEMPLATE_DIR \
+    if [ ! -f $SYSC_TEMPLATE ] ; then \
+        TEMPLATE_DIR=/var/adm/fillup-templates \
+        SYSC_TEMPLATE=$TEMPLATE_DIR/sysconfig.$PNAME$SUBPNAME \
+    fi \
+    SD_NAME="" \
+    %{-d:%{-s:SD_NAME=%{3}/}%{!-s:SD_NAME=%{2}/}} \
+    %{sysc_fillup} \
+    %nil
+
+# internal only: sysc_fillup
+%sysc_fillup() \
+    if [ -x /bin/fillup ] ; then \
+	if [ -f $SYSC_TEMPLATE ] ; then \
+	    echo "Updating /etc/sysconfig/$SD_NAME$PNAME ..." \
+	    mkdir -p /etc/sysconfig/$SD_NAME \
+	    touch /etc/sysconfig/$SD_NAME$PNAME \
+	    /bin/fillup -q /etc/sysconfig/$SD_NAME$PNAME $SYSC_TEMPLATE \
+	fi \
+    else \
+	echo "ERROR: fillup not found. This should not happen. Please compare" \
+	echo "/etc/sysconfig/$PNAME and $TEMPLATE_DIR/sysconfig.$PNAME and" \
+	echo "update by hand." \
+    fi
+
+# macro: rename_sysconfig_variable
+#     as the name says, rename a variable in the file given with -f
+%rename_sysconfig_variable(f:) \
+    %{!-f:echo "missing argument for rename_sysconfig_variable"; exit 1; }%{-f:FILE=%{-f*}} \
+    if [ -f $FILE ] ; then \
+	sed -i -e "s/^%{1}=/%{2}=/" $FILE \
+    fi
+
+# macro: remove_and_set
+#      remove variables from sysconfig.$NAME
+#      (both if existant) and set them in the environment
+#      for further handling in postinstall
+#  options: -n set package name
+#           -y default to yes if not found (otherwise no)
+%remove_and_set(n:y) \
+    %{-n:PNAME=%{-n*}}%{!-n:PNAME=%{name}} \
+    DEF_VAL=%{-y:"yes"}%{!-y:"no"} \
+    DEL_TEMPL=%{_fillupdir}/$PNAME.del \
+    rm -f $DEL_TEMPL \
+    for var in %{?*} ; do \
+	echo -e "#\\n$var=$DEF_VAL\\n" >> $DEL_TEMPL \
+    done \
+    if [ -f /etc/sysconfig/$PNAME ] ; then \
+	/bin/fillup -q -t -r -i -d "=" /etc/sysconfig/$PNAME $DEL_TEMPL /etc/sysconfig/$PNAME.deleted.$$ \
+	test -f /etc/sysconfig/$PNAME.new && mv /etc/sysconfig/$PNAME.new /etc/sysconfig/$PNAME \
+    fi  \
+    for i in $DEL_TEMPL /etc/sysconfig/$PNAME.deleted.$$ ; do \
+	if [ -f $i ] ; then \
+	    . $i \
+	    rm -f $i \
+	fi \
+    done
+
+%insserv_force_if_yast() \
+    /sbin/insserv ${YAST_IS_RUNNING:+-f} %{?*}
+
+%run_ldconfig /sbin/ldconfig
+
+# for %post
+%install_info(:-:) \
+    ALL_ARGS=(%{**}) \
+    if test -x /sbin/install-info ; then \
+	/sbin/install-info "${ALL_ARGS[@]}" || : \
+    fi ;
+
+# for %preun
+%install_info_delete(:-:) \
+    test -n "$FIRST_ARG" || FIRST_ARG=$1 \
+    if test -x /sbin/install-info ; then \
+	if [ "$FIRST_ARG" = 0 ]; then \
+	    /sbin/install-info --quiet --delete %{**} || : \
+	fi ; \
+    fi ;
+
+# find-supplements.ksyms parses this macro directly out of the spec file:
+%supplements_kernel_module() \
+    %{expand:%(if ! rpm -q kernel-syms > /dev/null; then echo "%fail Please add the kernel-syms package to BuildRequires"; fi)}
+
+%suse_version @suse_version@
+%sles_version @sles_version@
+%ul_version @ul_version@
+%is_opensuse @is_opensuse@
+%sle_version @sle_version@
+%leap_version @leap_version@
+
+%do_profiling 1
+%cflags_profile_generate -fprofile-update=atomic -fprofile-generate
+%cflags_profile_feedback -fprofile-use
+
+%suse_install_update_message() \
+    install -D -m 644 %1 %buildroot/var/adm/update-messages/%{name}-%{version}-%{release}-%(basename %1).txt \
+%nil
+
+%suse_install_update_script() \
+     install -D -m 755 %1 %buildroot/var/adm/update-scripts/%{name}-%{version}-%{release}-%(basename %1).txt \
+%nil
+
+# Template for lang sub-package.
+%lang_package(n:r:) \
+%package %{-n:-n %{-n*}-}lang \
+Summary: Translations for package %{name} \
+Group: System/Localization \
+Requires: %{-n:%{-n*}}%{!-n:%{name}} = %{version} \
+%{-r:Requires: %{-r*}} \
+Provides: %{-n:%{-n*}}%{!-n:%{name}}-lang-all = %{version} \
+Supplements: %{-n:%{-n*}}%{!-n:%{name}} \
+BuildArch: noarch \
+%description %{-n:-n %{-n*}-}lang \
+Provides translations for the \"%{name}\" package.
+
+# package version comparison macros
+
+# compare two versions, returns -1, 0, 1, ~~~
+%rpm_vercmp() %{lua:print(rpm.expand('%1') == '~~~' and '~~~' or rpm.vercmp(rpm.expand('%1'), rpm.expand('%2')))}
+
+# expand to the installed version of a package/provides
+%pkg_version() %(LC_ALL=C rpm -q --whatprovides --qf "%%{version}" "%1" | sed -e "s/^no package provides .*/~~~/")
+
+# compare the installed version to a value. returns -1, 0, 1, ~~~
+%pkg_version_cmp() %{expand:%{expand:%%%%{rpm_vercmp %%{pkg_version %1} %%2}}}
+
+# convenience/readability
+%pkg_vcmp() (%{expand:%%{pkg_version_cmp %1 %3}} %2 0)
+

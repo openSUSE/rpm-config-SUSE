@@ -1,0 +1,81 @@
+#! /bin/bash
+
+IFS=$'\n'
+
+is_tumbleweed=false
+
+if test "$1" = "--tumbleweed"; then
+    if test "$2" -gt 0; then
+        is_tumbleweed=true
+    fi
+    shift 2
+fi
+
+if ! $is_tumbleweed; then
+    trap 'rm -f "$tmp"' EXIT
+    tmp=$(mktemp)
+fi
+
+
+while read f; do
+    test -e "$f" || continue
+    is_module=""
+    case "$f" in
+    *.debug)
+        continue
+        ;;
+    */boot/vmlinu[xz]-*)
+        flavor=${f##*/vmlinu[xz]-}
+        flavor=${flavor%.gz}
+        echo "kernel-uname-r = $flavor"
+        version=${flavor}
+        flavor=${flavor##*-}
+        ;;
+    */lib/modules/*/*.ko | */lib/modules/*/*.ko.gz | */boot/vmlinu[xz]*)
+        is_module="1"
+        ;;
+    *)
+        continue
+    esac
+    if $is_tumbleweed; then
+        continue
+    fi
+    unzip=false
+    case "$f" in
+    *.gz | */boot/vmlinuz*)
+        unzip=true
+    esac
+    if $unzip && gzip -cd "$f" >"$tmp"; then
+        f=$tmp
+    fi
+    if test -z "$flavor" -a -n "$is_module" ; then
+        flavor=$(/sbin/modinfo -F vermagic "$f")
+        flavor=${flavor%% *}
+        version=${flavor}
+        flavor=${flavor##*-}
+    fi
+    if test -z "$flavor"; then
+        echo "warning: cannot determine kernel flavor from $(/sbin/modinfo -F vermagic "$f" 2>&1)" >&2
+        continue
+    fi
+    objdir=$(readlink /lib/modules/$version/build)
+    objdir_build=$RPM_BUILD_ROOT$(readlink $RPM_BUILD_ROOT/lib/modules/$version/build)
+    for i in $objdir_build $objdir ; do
+            ksym_provides=$i/scripts/mod/ksym-provides
+            [ -x $ksym_provides ] && break
+    done
+    if [ -x $ksym_provides ] ; then
+            $ksym_provides $flavor $f
+    else
+            major=${version%%.*}
+            sub=${version#*.}
+            sub=${sub%%.*}
+            if [ "$major" -ge 4 -a "$sub" -ge 10 ] ; then
+                    echo "error: cannot determine ksym provides of $f - missing ksym-povides tool." >&2
+            else
+                    nm "$f" \
+                            | sed -r -ne "s/^0*([0-9a-f]+) A __crc_(.+)/ksym($flavor:\\2) = \\1/p"
+            fi
+    fi
+done \
+| sort -u
