@@ -21,7 +21,7 @@ Name:           rpm-config-SUSE
 Version:        0
 Release:        0
 Summary:        SUSE specific RPM configuration files
-License:        GPL-2.0+
+License:        GPL-2.0-or-later
 Group:          System/Packages
 URL:            https://github.com/openSUSE/rpm-config-SUSE
 Source:         %{name}-%{version}.tar.gz
@@ -55,7 +55,6 @@ sed -e 's/@suse_version@/%{?suse_version}%{!?suse_version:0}/' \
 %endif
   < suse_macros.in > suse_macros
 
-
 %install
 # Install SUSE vendor macros and rpmrc
 mkdir -p %{buildroot}%{_rpmconfigdir}/suse
@@ -65,7 +64,6 @@ cp -a suse_macros %{buildroot}%{_rpmconfigdir}/suse/macros
 cp -a fileattrs %{buildroot}%{_rpmconfigdir}
 cp -a scripts/* %{buildroot}%{_rpmconfigdir}
 cp -a macros.d %{buildroot}%{_rpmconfigdir}
-
 
 %files
 %license COPYING
@@ -82,4 +80,3 @@ cp -a macros.d %{buildroot}%{_rpmconfigdir}
 %{_rpmconfigdir}/find-supplements.ksyms
 
 %changelog
-
