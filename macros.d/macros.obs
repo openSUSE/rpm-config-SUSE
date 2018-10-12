@@ -13,8 +13,8 @@
 %service_add() %{fillup_and_insserv %{1}}
 
 %user_group_add() \
-/usr/sbin/groupadd -r %{1} 2>/dev/null || :\
-/usr/sbin/useradd -r -g %{1} -d %{2} -s %{3} -c %{4} %{1} 2>/dev/null || :\
+getent group %{1} >/dev/null || /usr/sbin/groupadd -r %{1} \
+getent passwd %{1} >/dev/null || /usr/sbin/useradd -r -g %{1} -d %{2} -s %{3} -c %{4} %{1} \
 %{nil}
 
 

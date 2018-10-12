@@ -263,7 +263,8 @@
 %package %{-n:-n %{-n*}-}lang \
 Summary: Translations for package %{name} \
 Group: System/Localization \
-Requires: %{-n:%{-n*} = %{version}} %{!-n:%{!-r:%{name} = %{version}}} \
+%{-n:Requires: %{-n*} = %{version}} \
+%{!-n:%{!-r:Requires: %{name} = %{version}}} \
 %{-r:Requires: %{-r*}} \
 Provides: %{-n:%{-n*}}%{!-n:%{name}}-lang-all = %{version} \
 Supplements: %{-n:%{-n*}}%{!-n:%{name}} \
