@@ -27,12 +27,25 @@ while read f; do
     */boot/vmlinu[xz]-*)
         flavor=${f##*/vmlinu[xz]-}
         flavor=${flavor%.gz}
-        echo "kernel-uname-r = $flavor"
         version=${flavor}
+        inst_prefix="$(dirname $f)"
+        inst_prefix="$(dirname $inst_prefix)"
+        echo "kernel-uname-r = $version"
+        builtin="$inst_prefix/lib/modules/$version/modules.builtin"
+        if [ -e "$builtin" ] ; then
+                while read mod ; do
+                        echo "kmod($(basename "$mod" .ko | tr '-' '_'))"
+                done < "$builtin"
+        else
+                echo "Builtin modules for $f not available in $builtin" >&2
+        fi
         flavor=${flavor##*-}
         ;;
-    */lib/modules/*/*.ko | */lib/modules/*/*.ko.gz | */boot/vmlinu[xz]*)
+    */lib/modules/*/*.ko | */lib/modules/*/*.ko.gz)
         is_module="1"
+        modname="${f%%.gz}"
+        modname="$(basename "$modname" .ko | tr '-' '_')"
+        echo "kmod($modname)"
         ;;
     *)
         continue
