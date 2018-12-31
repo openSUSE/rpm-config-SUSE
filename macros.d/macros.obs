@@ -17,4 +17,5 @@ getent group %{1} >/dev/null || /usr/sbin/groupadd -r %{1} \
 getent passwd %{1} >/dev/null || /usr/sbin/useradd -r -g %{1} -d %{2} -s %{3} -c %{4} %{1} \
 %{nil}
 
-
+# default optflags is with -flto, but a bunch of code does not support that. Offer an easy accessor to optflags without lto
+%optflagsnolto %(echo %{optflags} | sed 's/-flto\\(=[0-9]\\+\\)\\?//')
