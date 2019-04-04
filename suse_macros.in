@@ -13,7 +13,7 @@
 %make_install           make install DESTDIR=%{?buildroot}
 %makeinstall            make DESTDIR=%{?buildroot:%{buildroot}} install
 %insserv_prereq         insserv sed
-%fillup_prereq          fillup coreutils grep diffutils
+%fillup_prereq          fillup coreutils diffutils
 %install_info_prereq    info
 
 # this script calls all scripts in /usr/lib/rpm/brp-suse.d
