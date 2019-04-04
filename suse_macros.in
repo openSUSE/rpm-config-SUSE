@@ -15,6 +15,17 @@
 %insserv_prereq         insserv sed
 %fillup_prereq          fillup coreutils diffutils
 %install_info_prereq    info
+%fillup_requires \
+	Requires(post): coreutils fillup sed \
+	%{nil}
+%install_info_requires \
+	Requires(post): info \
+	Requires(postun): info \
+	%{nil}
+%permission_requires \
+	Requires(post): permissions \
+	Requires(verify): permissions \
+	%{nil}
 
 # this script calls all scripts in /usr/lib/rpm/brp-suse.d
 %__os_install_post  \
