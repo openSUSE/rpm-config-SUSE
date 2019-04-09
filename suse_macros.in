@@ -221,9 +221,8 @@
 
 # for %post
 %install_info(:-:) \
-    ALL_ARGS=(%{**}) \
     if test -x /sbin/install-info ; then \
-	/sbin/install-info "${ALL_ARGS[@]}" || : \
+	/sbin/install-info %{**} || : \
     fi ;
 
 # for %preun
