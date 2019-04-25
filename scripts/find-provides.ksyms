@@ -33,8 +33,8 @@ while read f; do
         echo "kernel-uname-r = $version"
         builtin="$inst_prefix/lib/modules/$version/modules.builtin"
         if [ -e "$builtin" ] ; then
-                while read mod ; do
-                        echo "kmod($(basename "$mod" .ko | tr '-' '_'))"
+                while read modname ; do
+                        echo "kmod($(basename "$modname" | tr '-' '_'))"
                 done < "$builtin"
         else
                 echo "Builtin modules for $f not available in $builtin" >&2
@@ -44,8 +44,7 @@ while read f; do
     */lib/modules/*/*.ko | */lib/modules/*/*.ko.gz)
         is_module="1"
         modname="${f%%.gz}"
-        modname="$(basename "$modname" .ko | tr '-' '_')"
-        echo "kmod($modname)"
+        echo "kmod($(basename "$modname" | tr '-' '_'))"
         ;;
     *)
         continue

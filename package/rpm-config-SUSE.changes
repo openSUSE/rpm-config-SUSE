@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Apr 25 16:15:13 UTC 2019 - Michal Suchanek <msuchanek@suse.de>
+
+- Provide/require modules with .ko suffix (jsc#SLE-3853)
+
+-------------------------------------------------------------------
 Wed Apr 10 09:59:33 CEST 2019 - kukuk@suse.de
 
 - Don't use bash syntax in %install_info macro [bsc#1131957]

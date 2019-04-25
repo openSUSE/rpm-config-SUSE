@@ -24,23 +24,23 @@ fi
 
 modules=()
 modreqs=""
-modsexp="" #matches empty line
+modsexp=""
 while read f ; do
 	case "$f" in
 		/lib/modules/*.ko) modules[${#modules[*]}]="$f" ;;
-		*/modules.builtin) while read x; do modsexp="$modsexp\\|$(basename "$x" .ko | tr '-' '_')"; done < $f ;;
+		*/modules.builtin) while read x; do modsexp="$modsexp|$(basename "$x" .ko | tr '-' '_')"; done < $f ;;
 		/usr/lib/modules-load.d/*.conf) while read x; do
 			case "$x" in
 				\#*|\;*);; #empty lines removed by grep
-				*)modreqs="$modreqs $x";;
+				*)modreqs="$modreqs $x.ko";;
 			esac
 		done < $f
 	esac
 done
-while read x ; do modsexp="$modsexp\\|$(basename "$x" .ko | tr '-' '_')" ; done << EOF
+while read x ; do modsexp="$modsexp|$(basename "$x" .ko | tr '-' '_')" ; done << EOF
 	$(echo "${modules[@]}" | tr ' ' '\n')
 EOF
-echo $modreqs | tr '- ' '_\n' | grep -ve "^\\($modsexp\\)\$" | while read x; do echo "kmod($x)" ; done
+echo $modreqs | tr ' -' '\n_' | grep -vE "^(|($modsexp).ko)\$" | while read x; do echo "kmod($x)" ; done
 
 if $is_tumbleweed; then
 	for module in "${modules[@]}"; do
