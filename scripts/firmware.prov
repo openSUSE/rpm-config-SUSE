@@ -3,6 +3,11 @@
 
 while read instfile ; do
   case $instfile in
-    */lib/firmware/*) test -f "$instfile" && echo "firmware(${instfile##*/lib/firmware/})" ;;
+    */lib/firmware/*) test -f "$instfile" || continue ;;
+    *) continue ;;
   esac
+
+  instfile=${instfile##*/lib/firmware/}
+  instfile=${instfile%.xz}
+  echo "firmware($instfile)"
 done
