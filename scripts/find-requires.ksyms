@@ -28,6 +28,7 @@ modsexp=""
 while read f ; do
 	case "$f" in
 		/lib/modules/*.ko) modules[${#modules[*]}]="$f" ;;
+		/lib/modules/*.ko.[gx]z) modules[${#modules[*]}]="${f%.*}" ;;
 		*/modules.builtin) while read x; do modsexp="$modsexp|$(basename "$x" .ko | tr '-' '_')"; done < $f ;;
 		/usr/lib/modules-load.d/*.conf) while read x; do
 			case "$x" in
@@ -52,9 +53,23 @@ if $is_tumbleweed; then
 	exit 0
 fi
 
+trap 'rm -f "$tmp"' EXIT
+tmp=$(mktemp)
+
 all_provides() {
     for module in "${modules[@]}"; do
-	nm "$module"
+	if [ -f "$module" ]; then
+	    nm "$module"
+	else
+	    if [ -f "$module".gz ]; then
+		gzip -cd "$module".gz > "$tmp"
+	    elif [ -f "$module".xz ]; then
+		xz -cd "$module".xz > "$tmp"
+	    else
+		continue
+	    fi
+	    nm "$tmp"
+	fi
     done \
     | sed -r -ne 's:^0*([0-9a-f]+) A __crc_(.+):\1\t\2:p' \
     | sort -t $'\t' -k2 -u
@@ -62,6 +77,15 @@ all_provides() {
 
 all_requires() {
     for module in "${modules[@]}"; do
+	if [ ! -f "$module" ]; then
+	    if [ -f "$module".gz ]; then
+		module="$module".gz
+	    elif [ -f "$module".xz ]; then
+		module="$module".xz
+	    else
+		continue
+	    fi
+	fi
 	set -- $(/sbin/modinfo -F vermagic "$module" | sed -e 's: .*::' -e q)
 	/sbin/modprobe --dump-modversions "$module" \
 	    | sed -r -e 's:^0x0*::' -e 's:$:\t'"$1"':'

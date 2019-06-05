@@ -41,9 +41,9 @@ while read f; do
         fi
         flavor=${flavor##*-}
         ;;
-    */lib/modules/*/*.ko | */lib/modules/*/*.ko.gz)
+    */lib/modules/*/*.ko | */lib/modules/*/*.ko.[gx]z)
         is_module="1"
-        modname="${f%%.gz}"
+        modname="${f%%.[gx]z}"
         echo "kmod($(basename "$modname" | tr '-' '_'))"
         ;;
     *)
@@ -52,12 +52,14 @@ while read f; do
     if $is_tumbleweed; then
         continue
     fi
-    unzip=false
+    unzip=""
     case "$f" in
     *.gz | */boot/vmlinuz*)
-        unzip=true
+        unzip="gzip -cd";;
+    *.xz)
+        unzip="xz -cd";;
     esac
-    if $unzip && gzip -cd "$f" >"$tmp"; then
+    if test -n "$unzip" && $unzip "$f" >"$tmp"; then
         f=$tmp
     fi
     if test -z "$flavor" -a -n "$is_module" ; then

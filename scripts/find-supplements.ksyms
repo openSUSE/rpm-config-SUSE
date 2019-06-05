@@ -50,7 +50,7 @@ hexenc() {
     done
 }
 
-for module in $(grep -E '/lib/modules/.+\.ko$' | grep -v '/lib/modules/[^/]*/kernel/'); do
+for module in $(grep -E '/lib/modules/.+\.ko(\.[gx]z)?$' | grep -v '/lib/modules/[^/]*/kernel/'); do
     vermagic=$(/sbin/modinfo -F vermagic "$module")
     krel=${vermagic%% *}
     /sbin/modinfo -F alias "$module" \
