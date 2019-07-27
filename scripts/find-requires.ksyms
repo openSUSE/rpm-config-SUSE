@@ -17,11 +17,6 @@ if test "$1" = "--tumbleweed"; then
     shift 2
 fi
 
-if [ -n "$is_kernel_package" ] || ! test -e /sbin/modprobe || ! test -e /sbin/modinfo ; then
-    cat > /dev/null
-    exit 0
-fi
-
 modules=()
 modreqs=""
 modsexp=""
@@ -51,6 +46,11 @@ if $is_tumbleweed; then
 		echo "kernel-uname-r = $flavor"
 	done
 	exit 0
+fi
+
+if [ -n "$is_kernel_package" ] || ! test -e /sbin/modprobe || ! test -e /sbin/modinfo ; then
+    cat > /dev/null
+    exit 0
 fi
 
 trap 'rm -f "$tmp"' EXIT
