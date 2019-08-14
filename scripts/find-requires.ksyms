@@ -40,10 +40,9 @@ echo $modreqs | tr ' -' '\n_' | grep -vE "^(|($modsexp).ko)\$" | while read x; d
 
 if $is_tumbleweed; then
 	for module in "${modules[@]}"; do
-		flavor=${module#*/lib/modules/}
-		flavor=${flavor%%/*}
-		flavor=${flavor##*-}
-		echo "kernel-uname-r = $flavor"
+		version=${module#*/lib/modules/}
+		version=${version%%/*}
+		echo "kernel-uname-r = $version"
 	done
 	exit 0
 fi

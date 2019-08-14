@@ -25,9 +25,8 @@ while read f; do
         continue
         ;;
     */boot/vmlinu[xz]-*)
-        flavor=${f##*/vmlinu[xz]-}
-        flavor=${flavor%.gz}
-        version=${flavor}
+        version=${f##*/vmlinu[xz]-}
+        version=${version%.gz}
         inst_prefix="$(dirname $f)"
         inst_prefix="$(dirname $inst_prefix)"
         echo "kernel-uname-r = $version"
@@ -39,7 +38,7 @@ while read f; do
         else
                 echo "Builtin modules for $f not available in $builtin" >&2
         fi
-        flavor=${flavor##*-}
+        flavor=${version##*-}
         ;;
     */lib/modules/*/*.ko | */lib/modules/*/*.ko.[gx]z)
         is_module="1"
@@ -63,10 +62,9 @@ while read f; do
         f=$tmp
     fi
     if test -z "$flavor" -a -n "$is_module" ; then
-        flavor=$(/sbin/modinfo -F vermagic "$f")
-        flavor=${flavor%% *}
-        version=${flavor}
-        flavor=${flavor##*-}
+        version=$(/sbin/modinfo -F vermagic "$f")
+        version=${version%% *}
+        flavor=${version##*-}
     fi
     if test -z "$flavor"; then
         echo "warning: cannot determine kernel flavor from $(/sbin/modinfo -F vermagic "$f" 2>&1)" >&2
