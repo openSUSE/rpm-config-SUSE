@@ -22,10 +22,10 @@ modreqs=""
 modsexp=""
 while read f ; do
 	case "$f" in
-		/lib/modules/*.ko) modules[${#modules[*]}]="$f" ;;
-		/lib/modules/*.ko.[gx]z) modules[${#modules[*]}]="${f%.*}" ;;
-		*/modules.builtin) while read x; do modsexp="$modsexp|$(basename "$x" .ko | tr '-' '_')"; done < $f ;;
-		/usr/lib/modules-load.d/*.conf) while read x; do
+		*/lib/modules/*.ko) modules[${#modules[*]}]="$f" ;;
+		*/lib/modules/*.ko.[gx]z) modules[${#modules[*]}]="${f%.*}" ;;
+		*/lib/modules/*/modules.builtin) while read x; do modsexp="$modsexp|$(basename "$x" .ko | tr '-' '_')"; done < $f ;;
+		*/usr/lib/modules-load.d/*.conf) while read x; do
 			case "$x" in
 				\#*|\;*);; #empty lines removed by grep
 				*)modreqs="$modreqs $x.ko";;
