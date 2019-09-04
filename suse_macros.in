@@ -267,7 +267,6 @@ Group: System/Localization \
 %{!-n:%{!-r:Requires: %{name} = %{version}}} \
 %{-r:Requires: %{-r*}} \
 Provides: %{-n:%{-n*}}%{!-n:%{name}}-lang-all = %{version} \
-Supplements: %{-n:%{-n*}}%{!-n:%{name}} \
 BuildArch: noarch \
 %description %{-n:-n %{-n*}-}lang \
 Provides translations for the \"%{name}\" package.

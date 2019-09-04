@@ -1,0 +1,10 @@
+#!/bin/bash
+targetpkg="${1%-lang}"
+if [ -z "$targetpkg" -o "$targetpkg" = "$1" ]; then
+	exit 0
+fi
+while read line; do
+	l="${line%%/LC_MESSAGES/*}"
+	l="${l##*/}"
+	echo "$targetpkg:$l"
+done
