@@ -1,6 +1,7 @@
 #!/bin/bash
 targetpkg="${1%-lang}"
 if [ -z "$targetpkg" -o "$targetpkg" = "$1" ]; then
+	cat >/dev/null
 	exit 0
 fi
 while read line; do
