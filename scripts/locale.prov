@@ -1,6 +1,11 @@
 #!/bin/bash
-targetpkg="${1%-lang}"
-if [ -z "$targetpkg" -o "$targetpkg" = "$1" ]; then
+targetpkg="$1"
+if [ "${targetpkg%-lang}" != "$1" ]; then
+	targetpkg="${targetpkg%-lang}"
+elif [ "${targetpkg%-locale}" != "$1" ]; then
+	targetpkg="${targetpkg%-locale}"
+else
+	# discard input
 	cat >/dev/null
 	exit 0
 fi
