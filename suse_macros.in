@@ -295,3 +295,6 @@ Provides translations for the \"%{name}\" package.
 %py_incdir              %{py_prefix}/include/python%{py_ver}
 %py_sitedir             %{py_libdir}/site-packages
 
+# dropped from rpm package
+%requires_eq() %(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+%requires_ge() %(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} >= %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
