@@ -299,3 +299,7 @@ Provides translations for the \"%{name}\" package.
 %requires_eq() %(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
 %requires_ge() %(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} >= %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
 %__perl			/usr/bin/perl
+
+# to be removed when no longer needed
+%_lto_cflags		%nil
+

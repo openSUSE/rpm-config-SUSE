@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Oct 29 11:21:54 CET 2019 - mls@suse.de
+
+- add _lto_cflags to suse_macros for now
+
+-------------------------------------------------------------------
 Wed Aug 14 12:55:05 UTC 2019 - Michal Suchanek <msuchanek@suse.de>
 
 - find-requires.ksyms: Move modinfo and modprobe check before the ksym
