@@ -301,5 +301,5 @@ Provides translations for the \"%{name}\" package.
 %__perl			/usr/bin/perl
 
 # to be removed when no longer needed
-%_lto_cflags		%nil
+%_lto_cflags		-flto=auto
 
