@@ -1,7 +1,7 @@
 #
 # spec file for package rpm-config-SUSE
 #
-# Copyright (c) 2018 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
 # Copyright (c) 2018 Neal Gompa <ngompa13@gmail.com>.
 #
 # All modifications and additions to the file contributed by third parties
@@ -30,6 +30,7 @@ Source:         %{name}-%{version}.tar.gz
 Requires:       rpm
 
 BuildArch:      noarch
+#!BuildIgnore:  rpm-config-SUSE
 
 %description
 This package contains the RPM configuration data for the SUSE Linux
@@ -74,6 +75,7 @@ cp -a macros.d %{buildroot}%{_rpmconfigdir}
 %{_rpmconfigdir}/brp-suse
 %{_rpmconfigdir}/firmware.prov
 %{_rpmconfigdir}/sysvinitdeps.sh
+%{_rpmconfigdir}/locale.prov
 # kmod deps
 %{_rpmconfigdir}/find-provides.ksyms
 %{_rpmconfigdir}/find-requires.ksyms
