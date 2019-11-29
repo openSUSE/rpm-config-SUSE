@@ -15,7 +15,8 @@
 %makeinstall            make DESTDIR=%{?buildroot:%{buildroot}} install
 %insserv_prereq         insserv sed
 %fillup_prereq          fillup coreutils grep diffutils
-%install_info_prereq    info
+# to be removed. deprecated since 11/2019 boo#1152105
+%install_info_prereq    %{nil}
 
 # this script calls all scripts in /usr/lib/rpm/brp-suse.d
 %__os_install_post  \
@@ -220,20 +221,13 @@
 
 %run_ldconfig /sbin/ldconfig
 
-# for %post
+# to be removed. deprecated since 11/2019 boo#1152105
 %install_info(:-:) \
-    if test -x /sbin/install-info ; then \
-	/sbin/install-info %{**} || : \
-    fi ;
+   %{nil}
 
-# for %preun
+# to be removed. deprecated since 11/2019 boo#1152105
 %install_info_delete(:-:) \
-    test -n "$FIRST_ARG" || FIRST_ARG=$1 \
-    if test -x /sbin/install-info ; then \
-	if [ "$FIRST_ARG" = 0 ]; then \
-	    /sbin/install-info --quiet --delete %{**} || : \
-	fi ; \
-    fi ;
+   %{nil}
 
 # find-supplements.ksyms parses this macro directly out of the spec file:
 %supplements_kernel_module() \
