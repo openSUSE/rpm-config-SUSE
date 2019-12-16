@@ -4,9 +4,14 @@ Mon Dec 16 17:58:53 UTC 2019 - Neal Gompa <ngompa13@gmail.com>
 - Add ldconfig_scriptlets macros for RH/Fedora compatibility
 
 -------------------------------------------------------------------
-Tue Oct 29 11:21:54 CET 2019 - mls@suse.de
+Tue Oct 29 11:21:54 CET 2019 - Michael Schroeder <mls@suse.de>
 
 - add _lto_cflags to suse_macros for now
+
+-------------------------------------------------------------------
+Thu Sep 26 12:30:58 UTC 2019 - Ludwig Nussel <ludwig.nussel@suse.de>
+
+- move %install_info to file triggers (boo#1152105)
 
 -------------------------------------------------------------------
 Wed Aug 14 12:55:05 UTC 2019 - Michal Suchanek <msuchanek@suse.de>
@@ -34,7 +39,7 @@ Thu Apr 25 16:15:13 UTC 2019 - Michal Suchanek <msuchanek@suse.de>
 - Provide/require modules with .ko suffix (jsc#SLE-3853)
 
 -------------------------------------------------------------------
-Wed Apr 10 09:59:33 CEST 2019 - kukuk@suse.de
+Wed Apr 10 09:59:33 CEST 2019 - Thorsten Kukuk <kukuk@suse.de>
 
 - Don't use bash syntax in %install_info macro [bsc#1131957]
 
@@ -45,7 +50,7 @@ Tue Mar  5 16:05:14 UTC 2019 - Michal Suchanek <msuchanek@suse.de>
   (FATE#326579).
 
 -------------------------------------------------------------------
-Wed Jan 30 13:57:55 CET 2019 - mls@suse.de
+Wed Jan 30 13:57:55 CET 2019 - Michael Schroeder <mls@suse.de>
 
 - Added macros.d/macros.initrd
 
@@ -55,7 +60,7 @@ Tue Dec 18 20:10:04 UTC 2018 - Michal Suchanek <msuchanek@suse.de>
 - Add kmod(module) provides to kernel and KMPs (FATE#326579).
 
 -------------------------------------------------------------------
-Wed Oct 24 16:10:40 CEST 2018 - msuchanek@suse.de
+Wed Oct 24 16:10:40 CEST 2018 - Michal Suchanek <msuchanek@suse.de>
 
 - Fix superfluous TOC. dependency (bsc#1113100)
 
@@ -73,7 +78,7 @@ Wed Sep  5 11:57:46 UTC 2018 - Jan Engelhardt <jengelh@inai.de>
   * Modified %lang_package to not inject -n when -r is given.
 
 -------------------------------------------------------------------
-Sat Aug 18 09:38:18 UTC 2018 - schwab@suse.de
+Sat Aug 18 09:38:18 UTC 2018 - Andreas Schwab <schwab@suse.de>
 
 - Break build cycle with rpm
 
