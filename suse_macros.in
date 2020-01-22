@@ -223,11 +223,11 @@
 
 # to be removed. deprecated since 11/2019 boo#1152105
 %install_info(:-:) \
-   %{nil}
+   : # install_info deprecated in favor of file triggers
 
 # to be removed. deprecated since 11/2019 boo#1152105
 %install_info_delete(:-:) \
-   %{nil}
+   : # install_info_delete deprecated in favor of file triggers
 
 # find-supplements.ksyms parses this macro directly out of the spec file:
 %supplements_kernel_module() \
