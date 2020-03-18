@@ -297,3 +297,5 @@ Provides translations for the \"%{name}\" package.
 # to be removed when no longer needed (when gcc-10.1 is in Factory)
 %_lto_cflags		-flto=auto
 
+# avoid overwriting files that didn't actually change on disk
+%_minimize_writes	1
