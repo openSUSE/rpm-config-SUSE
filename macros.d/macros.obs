@@ -4,14 +4,6 @@
 %ext_info .gz
 %ext_man .gz
 
-%info_add() test -x /sbin/install-info -a -f %{?2}%{?!2:%{_infodir}}/%{1}%ext_info && /sbin/install-info --info-dir=%{?2}%{?!2:%{_infodir}} %{?2}%{?!2:%{_infodir}}/%{1}%ext_info \
-%{nil}
-
-%info_del() test -x /sbin/install-info -a ! -f %{?2}%{?!2:%{_infodir}}/%{1}%ext_info && /sbin/install-info --quiet --delete --info-dir=%{?2}%{?!2:%{_infodir}} %{?2}%{?!2:%{_infodir}}/%{1}%ext_info \
-%{nil}
-
-%service_add() %{fillup_and_insserv %{1}}
-
 %user_group_add() \
 getent group %{1} >/dev/null || /usr/sbin/groupadd -r %{1} \
 getent passwd %{1} >/dev/null || /usr/sbin/useradd -r -g %{1} -d %{2} -s %{3} -c %{4} %{1} \
