@@ -299,3 +299,10 @@ Provides translations for the \"%{name}\" package.
 
 # avoid overwriting files that didn't actually change on disk
 %_minimize_writes	1
+
+# set meson build flags
+%set_build_flags \
+    export CFLAGS="${CFLAGS:-%optflags}"     \
+    export CXXFLAGS="${CXXFLAGS:-%optflags}" \
+    export FFLAGS="${FFLAGS:-%optflags}"     \
+    export FCFLAGS="${FCFLAGS:-%optflags}"   \
