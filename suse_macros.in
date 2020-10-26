@@ -9,6 +9,7 @@
 %_defaultdocdir         %{_usr}/share/doc/packages
 %_fillupdir             %{_usr}/share/fillup-templates
 %_distconfdir           %{_usr}/etc
+%_firmwaredir           /lib/firmware
 
 # package build macros
 %make_install           make install DESTDIR=%{?buildroot}
