@@ -82,7 +82,7 @@ while read f; do
             major=${version%%.*}
             sub=${version#*.}
             sub=${sub%%.*}
-            if [ "$major" -ge 4 -a "$sub" -ge 10 ] ; then
+            if [ "$major" -gt 4 -o \( "$major" -eq 4 -a "$sub" -ge 10 \) ] ; then
                     echo "error: cannot determine ksym provides of $f - missing ksym-povides tool." >&2
             else
                     nm "$f" \
