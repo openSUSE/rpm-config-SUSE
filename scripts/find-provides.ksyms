@@ -74,10 +74,10 @@ while read f; do
     objdir_build=$RPM_BUILD_ROOT$(readlink $RPM_BUILD_ROOT/lib/modules/$version/build)
     for i in $objdir_build $objdir ; do
             ksym_provides=$i/scripts/mod/ksym-provides
-            [ -x $ksym_provides ] && break
+            [ -x "$ksym_provides" ] && break
     done
-    if [ -x $ksym_provides ] ; then
-            $ksym_provides $flavor $f
+    if [ -x "$ksym_provides" ] ; then
+            "$ksym_provides" $flavor $f
     else
             major=${version%%.*}
             sub=${version#*.}
