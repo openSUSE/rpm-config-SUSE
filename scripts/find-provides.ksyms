@@ -26,7 +26,7 @@ while read f; do
         ;;
     */boot/vmlinu[xz]-*)
         version=${f##*/vmlinu[xz]-}
-        version=${version%.gz}
+        version=${version%.[gx]z}
         inst_prefix="$(dirname $f)"
         inst_prefix="$(dirname $inst_prefix)"
         echo "kernel-uname-r = $version"
