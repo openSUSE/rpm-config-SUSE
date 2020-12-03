@@ -1,0 +1,2 @@
+%__modulesload_requires		%{_rpmconfigdir}/find-requires.ksyms --tumbleweed %{?sle_version:0}%{!?sle_version:1}
+%__modulesload_path		^/usr/lib/modules-load.d/.*\.conf$
