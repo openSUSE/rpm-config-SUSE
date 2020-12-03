@@ -110,7 +110,7 @@ if [ ${#modules[@]} -gt 0 ]; then
     | awk '
     { FS = "\t" ; OFS = "\t" }
 	    { split($1, arr, "/")
-	      flavor = gensub(/.*-/, "", "", arr[1]) }
+	      flavor = gensub(/.*-/, "", 1, arr[1]) }
     NF == 3 { print "kernel(" flavor ":" $2 ") = " $3
 	      next }
 	    { print "ksym(" flavor ":" arr[3] ") = " arr[2] }
