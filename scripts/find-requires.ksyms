@@ -36,7 +36,7 @@ done
 while read x ; do modsexp="$modsexp|$(basename "$x" .ko | tr '-' '_')" ; done << EOF
 	$(echo "${modules[@]}" | tr ' ' '\n')
 EOF
-echo $modreqs | tr ' -' '\n_' | grep -vE "^(|($modsexp).ko)\$" | while read x; do echo "kmod($x)" ; done
+echo $modreqs | tr ' -' '\n_' | grep -vE "^(|($modsexp).ko)\$" | while read x; do echo "(kmod($x) if kernel)" ; done
 
 if $is_tumbleweed; then
 	for module in "${modules[@]}"; do
