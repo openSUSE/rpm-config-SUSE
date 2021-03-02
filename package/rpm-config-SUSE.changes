@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar  3 16:59:22 UTC 2021 - Ludwig Nussel <lnussel@suse.de>
+
+- Prepare usrmerge (boo#1029961): add %usrmerged macro
+
+-------------------------------------------------------------------
 Mon Dec 16 17:58:53 UTC 2019 - Neal Gompa <ngompa13@gmail.com>
 
 - Add ldconfig_scriptlets macros for RH/Fedora compatibility

@@ -1,6 +1,8 @@
 # need to keep this around for a while
 %suse_check             %{nil}
 
+%usrmerged              @usrmerged@
+
 # directories
 %_infodir               %{_prefix}/share/info
 %_mandir                %{_prefix}/share/man
@@ -9,7 +11,7 @@
 %_defaultdocdir         %{_usr}/share/doc/packages
 %_fillupdir             %{_usr}/share/fillup-templates
 %_distconfdir           %{_usr}/etc
-%_firmwaredir           /lib/firmware
+%_firmwaredir           %{?usrmerged:%{_usr}}/lib/firmware
 
 # package build macros
 %make_install           make install DESTDIR=%{?buildroot}
