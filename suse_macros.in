@@ -14,8 +14,8 @@
 %_firmwaredir           %{?usrmerged:%{_usr}}/lib/firmware
 
 # package build macros
-%make_install           make install DESTDIR=%{?buildroot}
-%makeinstall            make DESTDIR=%{?buildroot:%{buildroot}} install
+%make_install           make install DESTDIR="%{?buildroot}"
+%makeinstall            make DESTDIR="%{?buildroot:%{buildroot}}" install
 %insserv_prereq         insserv sed
 %fillup_prereq          fillup /usr/bin/mkdir /usr/bin/touch
 # to be removed. deprecated since 11/2019 boo#1152105
