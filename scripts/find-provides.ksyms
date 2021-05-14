@@ -83,7 +83,7 @@ while read f; do
             sub=${version#*.}
             sub=${sub%%.*}
             if [ "$major" -gt 4 -o \( "$major" -eq 4 -a "$sub" -ge 10 \) ] ; then
-                    echo "error: cannot determine ksym provides of $f - missing ksym-povides tool." >&2
+                    echo "error: cannot determine ksym provides of $f - missing ksym-provides tool." >&2
             else
                     nm "$f" \
                             | sed -r -ne "s/^0*([0-9a-f]+) A __crc_(.+)/ksym($flavor:\\2) = \\1/p"
