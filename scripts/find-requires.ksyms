@@ -24,6 +24,7 @@ while read f ; do
 	case "$f" in
 		*/lib/modules/*.ko) modules[${#modules[*]}]="$f" ;;
 		*/lib/modules/*.ko.[gx]z) modules[${#modules[*]}]="${f%.*}" ;;
+		*/lib/modules/*.ko.zst) modules[${#modules[*]}]="${f%.*}" ;;
 		*/lib/modules/*/modules.builtin) while read x; do modsexp="$modsexp|$(basename "$x" .ko | tr '-' '_')"; done < $f ;;
 		*/usr/lib/modules-load.d/*.conf) while read x; do
 			case "$x" in
@@ -64,6 +65,8 @@ all_provides() {
 		gzip -cd "$module".gz > "$tmp"
 	    elif [ -f "$module".xz ]; then
 		xz -cd "$module".xz > "$tmp"
+	    elif [ -f "$module".zst ]; then
+		zstd -cd "$module".zst > "$tmp"
 	    else
 		continue
 	    fi
@@ -81,6 +84,8 @@ all_requires() {
 		module="$module".gz
 	    elif [ -f "$module".xz ]; then
 		module="$module".xz
+	    elif [ -f "$module".zst ]; then
+		module="$module".zst
 	    else
 		continue
 	    fi
