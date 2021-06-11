@@ -40,9 +40,10 @@ while read f; do
         fi
         flavor=${version##*-}
         ;;
-    */lib/modules/*/*.ko | */lib/modules/*/*.ko.[gx]z)
+    */lib/modules/*/*.ko | */lib/modules/*/*.ko.[gx]z | */lib/modules/*/*.ko.zst)
         is_module="1"
         modname="${f%%.[gx]z}"
+        modname="${modname%%.zst}"
         echo "kmod($(basename "$modname" | tr '-' '_'))"
         ;;
     *)
@@ -57,6 +58,8 @@ while read f; do
         unzip="gzip -cd";;
     *.xz)
         unzip="xz -cd";;
+    *.zst)
+        unzip="zstd -cd";;
     esac
     if test -n "$unzip" && $unzip "$f" >"$tmp"; then
         f=$tmp
