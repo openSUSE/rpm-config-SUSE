@@ -30,11 +30,12 @@ while read f; do
         inst_prefix="$(dirname $f)"
         inst_prefix="$(dirname $inst_prefix)"
         echo "kernel-uname-r = $version"
-        builtin="$inst_prefix/lib/modules/$version/modules.builtin"
-        if [ -e "$builtin" ] ; then
+        builtin="/lib/modules/$version/modules.builtin"
+        [ -e "$inst_prefix/usr$builtin" ] && builtin="/usr$builtin"
+        if [ -e "$inst_prefix/$builtin" ] ; then
                 while read modname ; do
                         echo "kmod($(basename "$modname" | tr '-' '_'))"
-                done < "$builtin"
+                done < "$inst_prefix/$builtin"
         else
                 echo "Builtin modules for $f not available in $builtin" >&2
         fi
@@ -73,9 +74,7 @@ while read f; do
         echo "warning: cannot determine kernel flavor from $(/sbin/modinfo -F vermagic "$f" 2>&1)" >&2
         continue
     fi
-    objdir=$(readlink /lib/modules/$version/build)
-    objdir_build=$RPM_BUILD_ROOT$(readlink $RPM_BUILD_ROOT/lib/modules/$version/build)
-    for i in $objdir_build $objdir ; do
+    for i in {,$RPM_BUILD_ROOT}{/usr,}/lib/modules/$version/build; do
             ksym_provides=$i/scripts/mod/ksym-provides
             [ -x "$ksym_provides" ] && break
     done
