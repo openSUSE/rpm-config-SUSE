@@ -73,7 +73,7 @@ cp -a macros.d %{buildroot}%{_rpmconfigdir}
 
 # Only ship macros.rpm415 for old openSUSE Leap / SLE
 %if 0%{?suse_version} >= 1550
-rm -f macros.d/macros.rpm415
+rm -f %{buildroot}%{_rpmconfigdir}/macros.rpm415
 %endif
 
 
