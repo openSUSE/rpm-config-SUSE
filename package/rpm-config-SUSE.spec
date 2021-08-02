@@ -24,7 +24,7 @@ Summary:        SUSE specific RPM configuration files
 License:        GPL-2.0-or-later
 Group:          System/Packages
 URL:            https://github.com/openSUSE/rpm-config-SUSE
-Source:         %{name}-%{version}.tar.gz
+Source:         %{name}-%{version}.tar.xz
 
 # RPM owns the directories we need
 Requires:       rpm
