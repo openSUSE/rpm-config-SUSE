@@ -62,7 +62,7 @@ while read f; do
     *.zst)
         unzip="zstd -cd";;
     esac
-    if test -n "$unzip" && $unzip "$f" >"$tmp"; then
+    if test -n "$unzip" && (IFS=" "; $unzip "$f" >"$tmp"); then
         f=$tmp
     fi
     if test -z "$flavor" -a -n "$is_module" ; then
