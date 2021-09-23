@@ -1,7 +1,5 @@
 #! /bin/bash
 
-IFS=$'\n'
-
 is_tumbleweed=false
 
 if test "$1" = "--tumbleweed"; then
