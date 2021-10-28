@@ -241,7 +241,6 @@
 %ul_version @ul_version@
 %is_opensuse @is_opensuse@
 %sle_version @sle_version@
-%leap_version @leap_version@
 
 %do_profiling 1
 %cflags_profile_generate -fprofile-update=atomic -fprofile-generate
