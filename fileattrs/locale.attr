@@ -1,4 +1,4 @@
 %__locale_provides	%{_rpmconfigdir}/locale.prov
-%__locale_path		/locales\?/[^/]*/LC_MESSAGES/.*\\.mo$
+%__locale_path		/locales\?/[^/]*/LC_MESSAGES/.*$
 %__locale_provides_opts	%{name}
 %__locale_namespace	locale
