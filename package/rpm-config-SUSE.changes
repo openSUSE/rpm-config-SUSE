@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jan 31 09:29:00 UTC 2022 - Dirk Müller <dmueller@suse.com>
+
+- avoid bashism in %%remove_and_set
+
+-------------------------------------------------------------------
 Wed Mar  3 16:59:22 UTC 2021 - Ludwig Nussel <lnussel@suse.de>
 
 - Prepare usrmerge (boo#1029961): add %usrmerged macro
