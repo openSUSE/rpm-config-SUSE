@@ -25,16 +25,14 @@ License:        GPL-2.0-or-later
 Group:          System/Packages
 URL:            https://github.com/openSUSE/rpm-config-SUSE
 Source:         %{name}-%{version}.tar.gz
-
+#!BuildIgnore:  rpm-config-SUSE
 # RPM owns the directories we need
 Requires:       rpm
-
 BuildArch:      noarch
-#!BuildIgnore:  rpm-config-SUSE
 
 %description
-This package contains the RPM configuration data for the SUSE Linux
-distribution family.
+This package contains the RPM configuration data for the SUSE and
+openSUSE distribution families.
 
 %prep
 %setup -q
