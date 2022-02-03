@@ -206,7 +206,7 @@
     DEL_TEMPL=%{_fillupdir}/$PNAME.del \
     rm -f $DEL_TEMPL \
     for var in %{?*} ; do \
-	echo -e "#\\n$var=$DEF_VAL\\n" >> $DEL_TEMPL \
+	printf "#\\n%s=%s\\n" "$var" "$DEF_VAL" >> $DEL_TEMPL \
     done \
     if [ -f /etc/sysconfig/$PNAME ] ; then \
 	/bin/fillup -q -t -r -i -d "=" /etc/sysconfig/$PNAME $DEL_TEMPL /etc/sysconfig/$PNAME.deleted.$$ \
