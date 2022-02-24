@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 24 13:15:51 UTC 2022 - Dirk Müller <dmueller@suse.com>
+
+- set buildshell to /usr/bin/bash
+
+-------------------------------------------------------------------
 Mon Jan 31 09:29:00 UTC 2022 - Dirk Müller <dmueller@suse.com>
 
 - avoid bashism in %%remove_and_set
