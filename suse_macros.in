@@ -301,3 +301,17 @@ Provides translations for the \"%{name}\" package.
 
 # avoid overwriting files that didn't actually change on disk
 %_minimize_writes	1
+
+# SUSE expects bash for building
+%_buildshell           /usr/bin/bash
+
+# Expands to shell code to seot the compiler/linker environment
+# variables CFLAGS, CXXFLAGS, FFLAGS, FCFLAGS, LDFLAGS if they have
+# not been set already.
+%set_build_flags \
+  CONFIG_SHELL="${CONFIG_SHELL:-/usr/bin/bash}" ; export CONFIG_SHELL ; \
+  CFLAGS="${CFLAGS:-%{?build_cflags}}" ; export CFLAGS ; \
+  CXXFLAGS="${CXXFLAGS:-%{?build_cxxflags}}" ; export CXXFLAGS ; \
+  FFLAGS="${FFLAGS:-%{?build_fflags}}" ; export FFLAGS ; \
+  FCFLAGS="${FCFLAGS:-%{?build_fflags}}" ; export FCFLAGS ; \
+  LDFLAGS="${LDFLAGS:-%{?build_ldflags}}" ; export LDFLAGS
