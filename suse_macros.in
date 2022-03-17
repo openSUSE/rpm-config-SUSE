@@ -301,3 +301,6 @@ Provides translations for the \"%{name}\" package.
 
 # avoid overwriting files that didn't actually change on disk
 %_minimize_writes	1
+
+# Use Zstandard compression for binary payloads
+%_binary_payload	w19.zstdio
