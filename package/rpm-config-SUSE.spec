@@ -58,6 +58,15 @@ sed -e 's/@suse_version@/%{?suse_version}%{!?suse_version:0}/' \
 %endif
   < suse_macros.in > suse_macros
 
+
+%if 0%{?is_opensuse}
+cat <<EOF > macros.d/macros.opensuse
+# trim binary changelogs to include roughly 3 years
+# maxnum,cuttime,minnum
+%%_binarychangelogtrim 0,$(date -d "Jan 1 UTC 3 years ago" +%s),10
+EOF
+%endif
+
 cat <<EOF > macros.d/macros.sbat
 # Common SBAT values for secure boot
 # https://github.com/rhboot/shim/blob/main/SBAT.md
