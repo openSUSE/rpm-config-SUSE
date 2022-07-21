@@ -257,7 +257,7 @@
 # Template for lang sub-package.
 %lang_package(n:r:) \
 %package %{-n:-n %{-n*}-}lang \
-Summary: Translations for package %{name} \
+Summary: Translations for package %{-n:%{-n*}}%{!-n:%{name}} \
 Group: System/Localization \
 %{-n:Requires: %{-n*} = %{version}} \
 %{!-n:%{!-r:Requires: %{name} = %{version}}} \
@@ -265,7 +265,7 @@ Group: System/Localization \
 Provides: %{-n:%{-n*}}%{!-n:%{name}}-lang-all = %{version} \
 BuildArch: noarch \
 %description %{-n:-n %{-n*}-}lang \
-Provides translations for the \"%{name}\" package.
+Provides translations for the \"%{-n:%{-n*}}%{!-n:%{name}}\" package.
 
 # package version comparison macros
 
