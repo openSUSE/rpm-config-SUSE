@@ -24,6 +24,14 @@
 # <name>-<ver>-<rel>.<arch>.
 %_unique_debug_srcs     0
 
+# NOW THE GREATEST HACK OF ALL
+# as rpm defines them to 1 an undefine in a spec file (as it happens in kernel-default.spec)
+# would restore the 1 but expecting a nil, so we need to be crude and put two 0s on
+# the stack so that undefine will behave like we didn't do that.
+%_unique_build_ids      0
+%_unique_debug_names    0
+%_unique_debug_srcs     0
+
 # we need to overwrite the full macro as we can't undefine in macro.d and
 # rpm has a version that will create "unique" build ids by seeding the %RELEASE
 # into the build id which in return leaks into the binaries and their hmac
