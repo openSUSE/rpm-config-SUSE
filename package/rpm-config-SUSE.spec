@@ -67,20 +67,6 @@ cat <<EOF > macros.d/macros.opensuse
 EOF
 %endif
 
-cat <<EOF > macros.d/macros.sbat
-# Common SBAT values for secure boot
-# https://github.com/rhboot/shim/blob/main/SBAT.md
-
-%if 0%{?is_opensuse}
-%%sbat_distro          opensuse
-%%sbat_distro_summary  The openSUSE Project
-%else
-%%sbat_distro          sle
-%%sbat_distro_summary  SUSE Linux Enterprise
-%endif
-%%sbat_distro_url      mailto:security@suse.de
-EOF
-
 %install
 # Install SUSE vendor macros and rpmrc
 mkdir -p %{buildroot}%{_rpmconfigdir}/suse

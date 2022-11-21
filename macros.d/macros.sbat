@@ -1,0 +1,16 @@
+# Common SBAT values for secure boot
+# https://github.com/rhboot/shim/blob/main/SBAT.md
+
+# Common
+%sbat_distro_url      mailto:security@suse.de
+
+# openSUSE
+%sbat_distro_opensuse opensuse
+%sbat_distro_summary_opensuse  The openSUSE Project
+
+# SLE
+%sbat_distro_sle          sle
+%sbat_distro_summary_sle  SUSE Linux Enterprise
+
+%sbat_distro          %{?is_opensuse:%{sbat_distro_opensuse}}%{!?is_opensuse:%{sbat_distro_sle}}
+%sbat_distro_summary  %{?is_opensuse:%{sbat_distro_summary_opensuse}}%{!?is_opensuse:%{sbat_distro_summary_sle}}
