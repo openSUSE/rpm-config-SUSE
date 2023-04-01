@@ -267,6 +267,9 @@ BuildArch: noarch \
 %description %{-n:-n %{-n*}-}lang \
 Provides translations for the \"%{-n:%{-n*}}%{!-n:%{name}}\" package.
 
+# Ignore C lang file from lang package file list
+%no_lang_C --without-C
+
 # package version comparison macros
 
 # compare two versions, returns -1, 0, 1, ~~~
