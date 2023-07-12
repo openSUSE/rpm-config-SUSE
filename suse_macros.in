@@ -294,7 +294,7 @@ Provides translations for the \"%{-n:%{-n*}}%{!-n:%{name}}\" package.
 %requires_ge() %(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} >= %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
 %__perl			/usr/bin/perl
 
-# to be removed when no longer needed (when gcc-10.1 is in Factory)
+# we use the macro as one can easily override it and thus disable LTO for a particular package
 %_lto_cflags		-flto=auto
 
 # avoid overwriting files that didn't actually change on disk
