@@ -17,7 +17,9 @@
 %insserv_prereq         insserv sed
 %fillup_prereq          fillup /usr/bin/mkdir /usr/bin/touch
 # to be removed. deprecated since 11/2019 boo#1152105
-%install_info_prereq    %{nil}
+# I can't just not define it, as otherwise all specs using it break: [   25s] error: line 27: Empty tag: Requires(post):
+%install_info_prereq    /bin/sh
+%suseconfig_fonts_prereq perl aaa_base
 
 # this script calls all scripts in /usr/lib/rpm/brp-suse.d
 %__os_install_post  \
