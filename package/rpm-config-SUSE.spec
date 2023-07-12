@@ -45,11 +45,6 @@ sed -e 's/@suse_version@/%{?suse_version}%{!?suse_version:0}/' \
     -e 's/@ul_version@/%{?ul_version}%{!?ul_version:0}/' \
     -e '/@is_opensuse@%{?is_opensuse:nomatch}/d' \
     -e 's/@is_opensuse@/%{?is_opensuse}%{!?is_opensuse:0}/' \
-%if 0%{?usrmerged}
-    -e 's/@usrmerged@/%{?usrmerged}/' \
-%else
-    -e '/@usrmerged@/d' \
-%endif
 %if 0%{?is_opensuse}
     -e '/@sle_version@%{?sle_version:nomatch}/d' \
     -e 's/@sle_version@/%{?sle_version}%{!?sle_version:0}/' \
