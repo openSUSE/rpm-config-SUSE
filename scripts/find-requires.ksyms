@@ -8,15 +8,6 @@ kernel-module-*)    ;; # Fedora kernel module package names start with
 kernel*)           is_kernel_package=1 ;;
 esac
 
-is_tumbleweed=false
-
-if test "$1" = "--tumbleweed"; then
-    if test "$2" -gt 0; then
-        is_tumbleweed=true
-    fi
-    shift 2
-fi
-
 modules=()
 modreqs=""
 modsexp=""
@@ -38,15 +29,6 @@ while read x ; do modsexp="$modsexp|$(basename "$x" .ko | tr '-' '_')" ; done <<
 	$(echo "${modules[@]}" | tr ' ' '\n')
 EOF
 echo $modreqs | tr ' -' '\n_' | grep -vE "^(|($modsexp).ko)\$" | while read x; do echo "(kmod($x) if kernel)" ; done
-
-if $is_tumbleweed; then
-	for module in "${modules[@]}"; do
-		version=${module#*/lib/modules/}
-		version=${version%%/*}
-		echo "kernel-uname-r = $version"
-	done
-	exit 0
-fi
 
 if [ -n "$is_kernel_package" ] || ! test -e /sbin/modprobe || ! test -e /sbin/modinfo ; then
     cat > /dev/null
