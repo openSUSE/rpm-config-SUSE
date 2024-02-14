@@ -47,7 +47,7 @@
 
 %set_permissions(f:) \
   if [ -x /usr/bin/chkstat ]; then \
-    /usr/bin/chkstat -n --set --system %{**} \
+    /usr/bin/chkstat -n --set --system %{**} || : \
   fi \
   %nil
 
