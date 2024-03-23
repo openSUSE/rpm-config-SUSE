@@ -292,8 +292,8 @@ Provides translations for the \"%{-n:%{-n*}}%{!-n:%{name}}\" package.
 %py_sitedir             %{py_libdir}/site-packages
 
 # dropped from rpm package
-%requires_eq() %(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
-%requires_ge() %(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} >= %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+%requires_eq() %{expand:%(t=$(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not"); test -n "$t" || echo "%%{error: %%%%{requires_eq %*} does not resolve}"; echo $t)}
+%requires_ge() %{expand:%(t=$(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %%{name} >= %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not"); test -n "$t" || echo "%%{error: %%%%{requires_eq %*} does not resolve}"; echo $t)}
 %__perl			/usr/bin/perl
 
 # we use the macro as one can easily override it and thus disable LTO for a particular package
