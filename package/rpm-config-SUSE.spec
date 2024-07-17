@@ -29,6 +29,8 @@ BuildRequires:  zstd
 #!BuildIgnore:  rpm-config-SUSE
 # RPM owns the directories we need
 Requires:       rpm
+# ignore the explicit bash requires from the kernel mod scripts
+%define __requires_exclude ^/bin/bash$
 BuildArch:      noarch
 
 %description
