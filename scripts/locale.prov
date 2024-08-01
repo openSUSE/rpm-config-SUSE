@@ -4,6 +4,8 @@ if [ "${targetpkg%-lang}" != "$1" ]; then
 	targetpkg="${targetpkg%-lang}"
 elif [ "${targetpkg%-locale}" != "$1" ]; then
 	targetpkg="${targetpkg%-locale}"
+elif [ "${targetpkg%-locale-base}" != "$1" ]; then
+	targetpkg="${targetpkg%-locale-base}"
 else
 	# discard input
 	cat >/dev/null
