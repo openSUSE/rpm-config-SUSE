@@ -45,16 +45,6 @@
 
 %is_plus %(if test -f /.buildenv ; then source /.buildenv ; if [[ "$BUILD_BASENAME" == *+kde ]] ; then echo 1 ; else echo 0 ; fi ; else echo 0 ; fi)
 
-%set_permissions(f:) \
-  if [ -x /usr/bin/chkstat ]; then \
-    /usr/bin/chkstat -n --set --system %{**} || : \
-  fi \
-  %nil
-
-%verify_permissions(e:f:) \
-   /usr/bin/chkstat -n --warn --system %{**} 1>&2 \
-   %nil
-
 %suse_update_libdir() \
    if [ %_lib != lib ]; then \
      for file in %{?*} ; do \
