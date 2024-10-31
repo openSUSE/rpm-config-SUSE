@@ -1,7 +1,7 @@
 #
 # spec file for package rpm-config-SUSE
 #
-# Copyright (c) 2022 SUSE LLC
+# Copyright (c) 2024 SUSE LLC
 # Copyright (c) 2018 Neal Gompa <ngompa13@gmail.com>.
 #
 # All modifications and additions to the file contributed by third parties
@@ -17,6 +17,8 @@
 #
 
 
+# ignore the explicit bash requires from the kernel mod scripts
+%define __requires_exclude ^/bin/bash$
 Name:           rpm-config-SUSE
 Version:        0
 Release:        0
@@ -29,8 +31,6 @@ BuildRequires:  zstd
 #!BuildIgnore:  rpm-config-SUSE
 # RPM owns the directories we need
 Requires:       rpm
-# ignore the explicit bash requires from the kernel mod scripts
-%define __requires_exclude ^/bin/bash$
 BuildArch:      noarch
 
 %description
@@ -57,10 +57,13 @@ sed -e 's/@suse_version@/%{?suse_version}%{!?suse_version:0}/' \
 
 
 %if 0%{?is_opensuse}
+# use latest build date of BuildRequires as reference and go to January 1st three years back - the + 6 * 3600 is to match exactly the previous value of 2020-01-01 00:00 as leap-years cause some hours of offset
+trimdate=$(rpm -qa --qf %{BUILDTIME}\\n |sort -n|tail -1)
+trimdate=$(( (trimdate / 31557600 - 3) * 31557600 + 6 * 3600 ))
 cat <<EOF > macros.d/macros.opensuse
 # trim binary changelogs to include roughly 3 years
 # maxnum,cuttime,minnum
-%%_binarychangelogtrim 0,$(date -d "Jan 1 UTC 3 years ago" +%s),10
+%%_binarychangelogtrim 0,$trimdate,10
 EOF
 %endif
 
