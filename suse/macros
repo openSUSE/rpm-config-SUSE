@@ -226,12 +226,6 @@
 %supplements_kernel_module() \
     %{expand:%(if ! rpm -q kernel-syms > /dev/null; then echo "%fail Please add the kernel-syms package to BuildRequires"; fi)}
 
-%suse_version @suse_version@
-%sles_version @sles_version@
-%ul_version @ul_version@
-%is_opensuse @is_opensuse@
-%sle_version @sle_version@
-
 %do_profiling 1
 %cflags_profile_generate -fprofile-update=atomic -fprofile-generate
 %cflags_profile_feedback -fprofile-use

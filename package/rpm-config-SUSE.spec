@@ -53,7 +53,7 @@ sed -e 's/@suse_version@/%{?suse_version}%{!?suse_version:0}/' \
 %else
     -e '/@sle_version@/d' \
 %endif
-  < suse_macros.in > suse_macros
+  < suse_dist_macros.in > macros.d/macros.susedist
 
 
 %if 0%{?is_opensuse}
@@ -69,8 +69,7 @@ EOF
 
 %install
 # Install SUSE vendor macros and rpmrc
-mkdir -p %{buildroot}%{_rpmconfigdir}/suse
-cp -a suse_macros %{buildroot}%{_rpmconfigdir}/suse/macros
+cp -a suse %{buildroot}%{_rpmconfigdir}
 
 # Install vendor dependency generators
 cp -a fileattrs %{buildroot}%{_rpmconfigdir}
