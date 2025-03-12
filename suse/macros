@@ -291,6 +291,11 @@ Provides translations for the \"%{-n:%{-n*}}%{!-n:%{name}}\" package.
 # SUSE expects bash for building
 %_buildshell           /usr/bin/bash
 
+# Tell obs-build to not use a constant in %jobs for reproducible builds
+# boo#1237231 https://github.com/rpm-software-management/rpm/issues/2343
+# note: $RPM_BUILD_NCPUS is only available in rpm versions after 2022-11-09
+%jobs ${RPM_BUILD_NCPUS}
+
 # Expands to shell code to seot the compiler/linker environment
 # variables CFLAGS, CXXFLAGS, FFLAGS, FCFLAGS, LDFLAGS if they have
 # not been set already.
