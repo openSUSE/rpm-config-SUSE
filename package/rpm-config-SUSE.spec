@@ -69,6 +69,7 @@ EOF
 
 %install
 # Install SUSE vendor macros and rpmrc
+install -d -m 0755 %{buildroot}%{_rpmconfigdir}
 cp -a suse %{buildroot}%{_rpmconfigdir}
 
 # Install vendor dependency generators
