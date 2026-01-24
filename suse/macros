@@ -168,6 +168,14 @@
 	    echo "Updating /etc/sysconfig/$SD_NAME$PNAME ..." \
 	    mkdir -p /etc/sysconfig/$SD_NAME \
 	    touch /etc/sysconfig/$SD_NAME$PNAME \
+            if [ -x /sbin/selinuxenabled ] && /sbin/selinuxenabled ; then \
+                if [ -x /sbin/restorecon ] ; then \
+                    /sbin/restorecon -Fv /etc/sysconfig/$SD_NAME$PNAME \
+                else \
+                    echo "ERROR: SELinux is enabled but restorecon not found." \
+                    echo "Please check if /etc/sysconfig/$SD_NAME$PNAME is labelled correctly." \
+                fi \
+            fi \
 	    /bin/fillup -q /etc/sysconfig/$SD_NAME$PNAME $SYSC_TEMPLATE \
 	fi \
     else \
