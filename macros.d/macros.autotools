@@ -1,0 +1,7 @@
+# Declarative build macros for autotools
+%buildsystem_autotools_conf() %configure %*
+%buildsystem_autotools_build() %make_build %*
+%buildsystem_autotools_install() %make_install %*
+# 0: target is built; 1: target needs rebuild; 2: any error
+%buildsystem_autotools_check() if %{__make} -q check || [ $? -ne 2 ]; then \
+    %make_build check; fi
