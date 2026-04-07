@@ -1,0 +1,8 @@
+# Generates dependencies for kernel and KMPs
+#
+# The file is named kmp.attr because some KMPs override these macros, and
+# expect this name (bsc#1249814)
+%__kmp_provides	%{_rpmconfigdir}/find-provides.ksyms %name
+%__kmp_path		^((/usr)?/lib/modules/[^/]*/(.*\.ko|vmlinux)(\.gz|\.xz|\.zst)?|/boot/vmlinux.*)$
+%__kmp_requires		%{_rpmconfigdir}/find-requires.ksyms %name
+%__kmp_supplements	%{_rpmconfigdir}/find-supplements.ksyms %name

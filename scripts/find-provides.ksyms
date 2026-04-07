@@ -21,7 +21,7 @@ while read f; do
         continue
         ;;
     */usr/lib/modules/*/vmlinux | */usr/lib/modules/*/vmlinux.[gx]z | */usr/lib/modules/*/vmlinux.zst)
-        version=${f%%/vmlinux.*}
+        version=${f%%/vmlinux*}
         version=${version##*/}
         echo "kernel-uname-r = $version"
         builtin="$(dirname $f)/modules.builtin"

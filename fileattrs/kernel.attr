@@ -1,4 +1,0 @@
-%__kernel_provides	%{_rpmconfigdir}/find-provides.ksyms %name
-%__kernel_path		^((/usr)?/lib/modules/[^/]*/(.*\.ko|vmlinux)(\.gz|\.xz|\.zst)?|/boot/vmlinux.*)$
-%__kernel_requires		%{_rpmconfigdir}/find-requires.ksyms %name
-%__kernel_supplements	%{_rpmconfigdir}/find-supplements.ksyms %name
